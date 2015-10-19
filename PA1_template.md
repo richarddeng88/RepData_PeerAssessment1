@@ -118,26 +118,18 @@ We group the data by interval this time and then calculate the mean of each inte
 
 ```r
 act2 <- group_by(act, interval)
-ave_interval <- summarize(act2, total= sum(steps,na.rm=T), mean = mean(steps, na.rm = T))
-plot(ave_interval$interval, ave_interval$total, type = "l", xlab = "interval", ylab = "mean of steps")
+ave_interval <- summarize(act2, mean = mean(steps, na.rm = T))
+plot(ave_interval$interval, ave_interval$mean, type = "l", xlab = "interval", ylab = "mean of steps")
+max_point <- ave_interval[ave_interval$mean== max(ave_interval$mean),]
+points(max_point$interval, max_point$interval, col="red",pch=11)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png) 
-
-```r
-max_point <- ave_interval[ave_interval$toal== max(ave_interval$total),]
-max_point
-```
-
-```
-## Source: local data frame [0 x 3]
-## 
-## Variables not shown: interval (int), total (int), mean (dbl)
-```
 We can observe the largest amount of steps occurs between time intervals 500 and 1000. The maximum average number of steps is: 206 and occurs in time interval #835
 
 ## Imputing missing values
 We noticed that there are missing values when we printed the first few rows of the act data, but so far we have not determined how many values are missing. The following lines will calculate the percentage of missing data as well as the number of rows that contain an NA.
+
 
 ```r
 sum(is.na(act))
@@ -205,7 +197,7 @@ summary(ave_newdata$total)
 
 ```
 ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-##      41    9819   11460   84190   15080  570600
+##      41    9819   10770   10770   12810   21190
 ```
 
 ```r
@@ -213,7 +205,7 @@ sd(ave_newdata$total)
 ```
 
 ```
-## [1] 190590.9
+## [1] 3974.391
 ```
 The mean and the median stay the same, however the 1st quantile of the new data slides closer to the mean. When we look at the standard deviation values, we can also observe that the new data has a smaller standard deviation, thus the effect of imputing NAs with the mean values for the time intervals is a decrease in the spread, we obtained a distribution that is more concentrated around the center of gravity.
 

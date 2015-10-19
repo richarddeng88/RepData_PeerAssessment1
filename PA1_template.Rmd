@@ -10,9 +10,7 @@ output:
 
 First, we read the date.
 ```{r}
-
 act <- read.csv("data/reproducible_research/activity.csv", header = T)
-
 ```
 
 Then, let's see the structure of our dataset.
@@ -58,15 +56,17 @@ In this section we will average the number of steps across each 5 min interval, 
 We group the data by interval this time and then calculate the mean of each interval goup:
 ```{r}
 act2 <- group_by(act, interval)
-ave_interval <- summarize(act2, total= sum(steps,na.rm=T), mean = mean(steps, na.rm = T))
-plot(ave_interval$interval, ave_interval$total, type = "l", xlab = "interval", ylab = "mean of steps")
-max_point <- ave_interval[ave_interval$toal== max(ave_interval$total),]
-max_point
+ave_interval <- summarize(act2, mean = mean(steps, na.rm = T))
+plot(ave_interval$interval, ave_interval$mean, type = "l", xlab = "interval", ylab = "mean of steps")
+max_point <- ave_interval[ave_interval$mean== max(ave_interval$mean),]
+points(max_point$interval, max_point$interval, col="red",pch=11)
+
 ```
 We can observe the largest amount of steps occurs between time intervals 500 and 1000. The maximum average number of steps is: 206 and occurs in time interval #835
 
 ## Imputing missing values
 We noticed that there are missing values when we printed the first few rows of the act data, but so far we have not determined how many values are missing. The following lines will calculate the percentage of missing data as well as the number of rows that contain an NA.
+
 ```{r}
 sum(is.na(act))
 mean(is.na(act$steps))
